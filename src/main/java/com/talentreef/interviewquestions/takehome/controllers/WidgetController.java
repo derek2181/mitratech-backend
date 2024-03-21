@@ -1,32 +1,38 @@
 package com.talentreef.interviewquestions.takehome.controllers;
 
-import com.talentreef.interviewquestions.takehome.models.Widget;
-import com.talentreef.interviewquestions.takehome.services.WidgetService;
+import com.talentreef.interviewquestions.takehome.models.WidgetDTO;
+import com.talentreef.interviewquestions.takehome.services.WidgetServiceImpl;
+import com.talentreef.interviewquestions.takehome.utils.GenericResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.Assert;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
 @RequestMapping(value = "/v1/widgets", produces = MediaType.APPLICATION_JSON_VALUE)
 public class WidgetController {
 
-  private final WidgetService widgetService;
+  private final WidgetServiceImpl widgetServiceImpl;
 
-  public WidgetController(WidgetService widgetService) {
-    Assert.notNull(widgetService, "widgetService must not be null");
-    this.widgetService = widgetService;
+  public WidgetController(WidgetServiceImpl widgetServiceImpl) {
+    Assert.notNull(widgetServiceImpl, "widgetService must not be null");
+    this.widgetServiceImpl = widgetServiceImpl;
   }
 
   @GetMapping
-  public ResponseEntity<List<Widget>> getAllWidgets() {
-    return ResponseEntity.ok(widgetService.getAllWidgets());
+  public ResponseEntity<GenericResponse> getAllWidgets() {
+    var response=widgetServiceImpl.getAllWidgets();
+    return ResponseEntity.status(response.getCode()).body(response);
+  }
+
+
+  @PostMapping
+  public ResponseEntity<GenericResponse> addWidget(@RequestBody WidgetDTO widgetDTO) {
+
+    var response=widgetServiceImpl.addWidget(widgetDTO);
+    return ResponseEntity.status(response.getCode()).body(response);
   }
 
 }

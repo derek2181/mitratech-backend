@@ -9,9 +9,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.talentreef.interviewquestions.takehome.models.Widget;
-import com.talentreef.interviewquestions.takehome.respositories.WidgetRepository;
-import com.talentreef.interviewquestions.takehome.services.WidgetService;
+import com.talentreef.interviewquestions.takehome.models.WidgetDTO;
+import com.talentreef.interviewquestions.takehome.services.WidgetServiceImpl;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -34,7 +33,7 @@ public class WidgetControllerTests {
   private MockMvc mockMvc;
 
   @Mock
-  private WidgetService widgetService;
+  private WidgetServiceImpl widgetServiceImpl;
 
   @InjectMocks
   private WidgetController widgetController;
@@ -46,17 +45,17 @@ public class WidgetControllerTests {
 
   @Test
   public void when_getAllWidgets_expect_allWidgets() throws Exception {
-    Widget widget = Widget.builder().name("Widget von Hammersmark").build();
-    List<Widget> allWidgets = List.of(widget);
-    when(widgetService.getAllWidgets()).thenReturn(allWidgets);
+    WidgetDTO widget = WidgetDTO.builder().name("Widget von Hammersmark").build();
+    List<WidgetDTO> allWidgets = List.of(widget);
+    when(widgetServiceImpl.getAllWidgets().result).thenReturn(allWidgets);
 
     MvcResult result = mockMvc.perform(get("/v1/widgets"))
                .andExpect(status().isOk())
                .andDo(print())
                .andReturn();
 
-    List<Widget> parsedResult = objectMapper.readValue(result.getResponse().getContentAsString(),
-        new TypeReference<List<Widget>>(){});
+    List<WidgetDTO> parsedResult = objectMapper.readValue(result.getResponse().getContentAsString(),
+        new TypeReference<List<WidgetDTO>>(){});
     assertThat(parsedResult).isEqualTo(allWidgets);
   }
 

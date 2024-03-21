@@ -1,28 +1,11 @@
 package com.talentreef.interviewquestions.takehome.services;
 
-import com.talentreef.interviewquestions.takehome.models.Widget;
-import com.talentreef.interviewquestions.takehome.respositories.WidgetRepository;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
-
+import com.talentreef.interviewquestions.takehome.models.WidgetDTO;
+import com.talentreef.interviewquestions.takehome.utils.GenericResponse;
 import java.util.List;
 
-@Slf4j
-@Service
-public class WidgetService {
+public interface WidgetService {
+     GenericResponse<List<WidgetDTO>> getAllWidgets();
 
-  private final WidgetRepository widgetRepository;
-
-  @Autowired
-  private WidgetService(WidgetRepository widgetRepository) {
-    Assert.notNull(widgetRepository, "widgetRepository must not be null");
-    this.widgetRepository = widgetRepository;
-  }
-
-  public List<Widget> getAllWidgets() {
-    return widgetRepository.findAll();
-  }
-
+     GenericResponse addWidget(WidgetDTO widgetDTO);
 }
