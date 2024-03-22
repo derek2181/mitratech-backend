@@ -1,6 +1,6 @@
 package com.talentreef.interviewquestions.takehome.controllers;
 
-import com.talentreef.interviewquestions.takehome.models.WidgetDTO;
+import com.talentreef.interviewquestions.takehome.models.dto.WidgetDTO;
 import com.talentreef.interviewquestions.takehome.services.WidgetServiceImpl;
 import com.talentreef.interviewquestions.takehome.utils.GenericResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -34,5 +34,10 @@ public class WidgetController {
     var response=widgetServiceImpl.addWidget(widgetDTO);
     return ResponseEntity.status(response.getCode()).body(response);
   }
+  @GetMapping("{widgetName}")
+  public ResponseEntity<GenericResponse> addWidget(@PathVariable String widgetName) {
 
+    var response=widgetServiceImpl.getWidgetByName(widgetName);
+    return ResponseEntity.status(response.getCode()).body(response);
+  }
 }

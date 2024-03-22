@@ -9,7 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.talentreef.interviewquestions.takehome.models.WidgetDTO;
+import com.talentreef.interviewquestions.takehome.models.dto.WidgetDTO;
 import com.talentreef.interviewquestions.takehome.services.WidgetServiceImpl;
 import org.junit.Before;
 import org.junit.Test;

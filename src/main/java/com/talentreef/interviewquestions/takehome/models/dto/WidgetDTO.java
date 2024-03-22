@@ -1,4 +1,4 @@
-package com.talentreef.interviewquestions.takehome.models;
+package com.talentreef.interviewquestions.takehome.models.dto;
 
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;

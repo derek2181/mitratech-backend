@@ -3,15 +3,13 @@ package com.talentreef.interviewquestions.takehome.services;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
-import com.talentreef.interviewquestions.takehome.entities.Widget;
-import com.talentreef.interviewquestions.takehome.models.WidgetDTO;
+import com.talentreef.interviewquestions.takehome.models.dto.WidgetDTO;
 import com.talentreef.interviewquestions.takehome.respositories.WidgetRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;

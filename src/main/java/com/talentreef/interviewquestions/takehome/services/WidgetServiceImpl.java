@@ -1,7 +1,8 @@
 package com.talentreef.interviewquestions.takehome.services;
 
 import com.talentreef.interviewquestions.takehome.entities.Widget;
-import com.talentreef.interviewquestions.takehome.models.WidgetDTO;
+import com.talentreef.interviewquestions.takehome.models.dto.WidgetDTO;
+import com.talentreef.interviewquestions.takehome.models.projections.WidgetProjection;
 import com.talentreef.interviewquestions.takehome.respositories.WidgetRepository;
 import com.talentreef.interviewquestions.takehome.utils.GenericResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -30,7 +31,7 @@ public class WidgetServiceImpl implements WidgetService {
   public GenericResponse<List<WidgetDTO>> getAllWidgets() {
     //Maps all the widgets into the DTO class
     var widgetsEntities=widgetRepository.findAll();
-    List<WidgetDTO> widgets=widgetRepository.findAll().stream()
+    var widgets=widgetRepository.findAll().stream()
             .map(entity -> modelMapper.map(entity, WidgetDTO.class))
             .collect(Collectors.toList());
 
@@ -50,6 +51,31 @@ public class WidgetServiceImpl implements WidgetService {
       response.setCode(201);
       response.setMessage("Widget created succesfully");
       return response;
+    }catch (Exception e){
+      response.setCode(400);
+      response.setMessage(e.getMessage());
+      return response;
+    }
+  }
+
+  @Override
+  public GenericResponse<WidgetProjection> getWidgetByName(String widgetName) {
+    var response=new GenericResponse<WidgetProjection>();
+    try{
+    var widgetEntity=widgetRepository.findByNameWithProjection(widgetName);
+
+    if(widgetEntity==null){
+      response.setCode(404);
+      response.setMessage("The widget with name: " + widgetName + " could not be found");
+      return response;
+    }
+
+    var widget=modelMapper.map(widgetEntity, WidgetProjection.class);
+
+    //Build the response
+    response.setCode(200);
+    response.setResult(widget);
+    return response;
     }catch (Exception e){
       response.setCode(400);
       response.setMessage(e.getMessage());
