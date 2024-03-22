@@ -12,18 +12,24 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RestController
 @RequestMapping(value = "/v1/widgets", produces = MediaType.APPLICATION_JSON_VALUE)
+@CrossOrigin(origins = "*")
 public class WidgetController {
 
   private final WidgetServiceImpl widgetServiceImpl;
-
+  //TODO custom exception handling
+  //TODO add logs
+  //TODO add Profiles
   public WidgetController(WidgetServiceImpl widgetServiceImpl) {
     Assert.notNull(widgetServiceImpl, "widgetService must not be null");
     this.widgetServiceImpl = widgetServiceImpl;
   }
 
   @GetMapping
-  public ResponseEntity<GenericResponse> getAllWidgets() {
-    var response=widgetServiceImpl.getAllWidgets();
+  public ResponseEntity<GenericResponse> getAllWidgets(@RequestParam(name = "page", defaultValue = "0") int page,
+                                                       @RequestParam(name = "size", defaultValue = "12") int size,
+                                                       @RequestParam(name = "sort", defaultValue = "12") boolean sort) {
+    var response=widgetServiceImpl.getAllWidgets(page,size,sort);
+    //TODO add pagination
     return ResponseEntity.status(response.getCode()).body(response);
   }
 
@@ -34,10 +40,13 @@ public class WidgetController {
     var response=widgetServiceImpl.addWidget(widgetDTO);
     return ResponseEntity.status(response.getCode()).body(response);
   }
-  @GetMapping("{widgetName}")
-  public ResponseEntity<GenericResponse> addWidget(@PathVariable String widgetName) {
+  @GetMapping("search")
+  public ResponseEntity<GenericResponse> getWidgetByName(@RequestParam(name = "name", required = false) String name,
+                                                   @RequestParam(name = "page", defaultValue = "0") int page,
+                                                   @RequestParam(name = "size", defaultValue = "12") int size,
+                                                         @RequestParam(name = "sort", defaultValue = "12") boolean sort) {
 
-    var response=widgetServiceImpl.getWidgetByName(widgetName);
+    var response=widgetServiceImpl.getWidgetByName(name,page,size,sort);
     return ResponseEntity.status(response.getCode()).body(response);
   }
 

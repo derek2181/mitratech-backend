@@ -8,6 +8,10 @@ import com.talentreef.interviewquestions.takehome.utils.GenericResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
@@ -30,15 +34,14 @@ public class WidgetServiceImpl implements WidgetService {
     this.widgetRepository = widgetRepository;
   }
 
-  public GenericResponse<List<WidgetDTO>> getAllWidgets() {
+  public GenericResponse<Page<WidgetDTO>> getAllWidgets(int page,int size,boolean sort) {
     //Maps all the widgets into the DTO class
-    var widgetsEntities=widgetRepository.findAll();
-    var widgets=widgetRepository.findAll().stream()
-            .map(entity -> modelMapper.map(entity, WidgetDTO.class))
-            .collect(Collectors.toList());
+    Pageable pageable = PageRequest.of(page, size,!sort ? Sort.by("name").ascending():Sort.by("name").descending());
+    var widgetPage=widgetRepository.findAll(pageable);
+    var widgets=widgetPage.map(widget -> modelMapper.map(widget, WidgetDTO.class));
 
     //Build the response
-    var response=new GenericResponse<List<WidgetDTO>>();
+    var response=new GenericResponse<Page<WidgetDTO>>();
     response.setCode(200);
     response.setResult(widgets);
     return response;
@@ -48,7 +51,7 @@ public class WidgetServiceImpl implements WidgetService {
   public GenericResponse<?> addWidget(WidgetDTO widgetDTO) {
     var response=new GenericResponse<>();
     try{
-      var widgetEntity=widgetRepository.findByNameWithProjection(widgetDTO.getName());
+      var widgetEntity=widgetRepository.findByName(widgetDTO.getName());
 
       if(widgetEntity!=null){
         response.setCode(400);
@@ -70,22 +73,15 @@ public class WidgetServiceImpl implements WidgetService {
   }
 
   @Override
-  public GenericResponse<WidgetProjection> getWidgetByName(String widgetName) {
-    var response=new GenericResponse<WidgetProjection>();
+  public GenericResponse<Page<WidgetProjection>> getWidgetByName(String widgetName, int page, int size,boolean sort) {
+    var response=new GenericResponse<Page<WidgetProjection>>();
     try{
-        var widgetEntity=widgetRepository.findByNameWithProjection(widgetName);
+        var pageable = PageRequest.of(page, size,!sort ? Sort.by("name").ascending():Sort.by("name").descending());
 
-        if(widgetEntity==null){
-          response.setCode(404);
-          response.setMessage("The widget with name: " + widgetName + " could not be found");
-          return response;
-        }
-
-        var widget=modelMapper.map(widgetEntity, WidgetProjection.class);
-
+        var widgetPage=widgetRepository.findByNameWithProjection(widgetName!=null && widgetName.isBlank() ? null : widgetName,pageable);
         //Build the response
         response.setCode(200);
-        response.setResult(widget);
+        response.setResult(widgetPage);
         return response;
     }catch (Exception e){
         response.setCode(400);

@@ -8,6 +8,12 @@ spring:
     hibernate:
       ddl-auto: update
     database-platform: org.hibernate.dialect.MySQL8Dialect
+  cors:
+    allowed-origins: "http://localhost:3000"
+    allowed-methods: GET,POST,PUT,DELETE
+    allowed-headers: "*"
+    allow-credentials: true
+    max-age: 3600
 server:
   port: 9000
 

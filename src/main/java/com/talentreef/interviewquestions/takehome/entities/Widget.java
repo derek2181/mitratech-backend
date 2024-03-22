@@ -21,7 +21,7 @@ public class Widget {
     @Column(length = 100, nullable = false, unique = true)
     public String name;
 
-    @Column(length = 1000, nullable = false, unique = true)
+    @Column(length = 1000, nullable = false)
     public String description;
     @Column(precision = 8, scale = 2) // Example precision and scale
     public BigDecimal price;
@@ -32,6 +32,6 @@ public class Widget {
     @Column(name = "update_date")
     public LocalDate  updateDate;
 
-    @Column( columnDefinition = "BIT DEFAULT 1",name = "is_active")
-    public boolean isActive;
+    @Column(name = "is_active")
+    public Boolean isActive=true;
 }
