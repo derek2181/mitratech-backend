@@ -105,9 +105,12 @@ public class WidgetServiceImpl implements WidgetService {
       widgetEntity.price=widgetDTO.getPrice();
       widgetEntity.updateDate=LocalDate.now();
       widgetRepository.save(widgetEntity);
+      WidgetDTO widget=modelMapper.map(widgetEntity,WidgetDTO.class);
+
       //Build the response
       response.setCode(200);
       response.setMessage("The widget with name: "+ widgetName + " was updated succesfully");
+      response.setResult(widget);
       return response;
     }catch (Exception e){
       response.setCode(400);

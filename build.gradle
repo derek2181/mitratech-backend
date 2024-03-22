@@ -56,6 +56,10 @@ dependencies {
 	//Database
 	implementation 'mysql:mysql-connector-java:8.0.28' // or the version compatible with your MySQL server
 
+
+	// https://mvnrepository.com/artifact/io.github.cdimascio/dotenv-java
+	implementation group: 'io.github.cdimascio', name: 'dotenv-java', version: '3.0.0'
+
 	// https://mvnrepository.com/artifact/org.projectlombok/lombok
 	compileOnly 'org.projectlombok:lombok:1.18.20'
 	annotationProcessor 'org.projectlombok:lombok:1.18.20'
