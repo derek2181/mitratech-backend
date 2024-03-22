@@ -40,4 +40,18 @@ public class WidgetController {
     var response=widgetServiceImpl.getWidgetByName(widgetName);
     return ResponseEntity.status(response.getCode()).body(response);
   }
+
+  @PatchMapping("{widgetName}")
+  public ResponseEntity<GenericResponse> updateWidget(@PathVariable String widgetName, @RequestBody WidgetDTO widgetDTO) {
+
+    var response=widgetServiceImpl.updateWidgetByName(widgetName,widgetDTO);
+    return ResponseEntity.status(response.getCode()).body(response);
+  }
+
+  @DeleteMapping("{widgetName}")
+  public ResponseEntity<GenericResponse> deleteWidget(@PathVariable String widgetName) {
+
+    var response=widgetServiceImpl.deleteWidgetByName(widgetName);
+    return ResponseEntity.status(response.getCode()).body(response);
+  }
 }

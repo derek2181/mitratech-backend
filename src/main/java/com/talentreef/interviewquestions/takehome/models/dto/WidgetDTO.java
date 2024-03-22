@@ -28,4 +28,5 @@ public class WidgetDTO {
   @DecimalMax(value = "20000",message = "This field must be less than 20000")
   @NotNull
   private BigDecimal price;
+
 }

@@ -8,7 +8,11 @@ import java.util.List;
 public interface WidgetService {
      GenericResponse<List<WidgetDTO>> getAllWidgets();
 
-     GenericResponse addWidget(WidgetDTO widgetDTO);
+     GenericResponse<?> addWidget(WidgetDTO widgetDTO);
 
      GenericResponse<WidgetProjection> getWidgetByName(String widgetName);
+
+     GenericResponse<WidgetDTO> updateWidgetByName(String widgetName,WidgetDTO widgetDTO);
+
+     GenericResponse<?> deleteWidgetByName(String widgetName);
 }
