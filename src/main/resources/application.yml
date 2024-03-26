@@ -14,12 +14,3 @@ spring:
 server:
   port: 9000
 
-logging:
-  level:
-    root: ${LOGGING_LEVEL:info}
-
-management:
-  endpoint:
-    health:
-      show-detail: always
-      show-components: always
