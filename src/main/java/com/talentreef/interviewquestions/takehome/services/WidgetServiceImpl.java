@@ -5,7 +5,9 @@ import com.talentreef.interviewquestions.takehome.models.dto.WidgetDTO;
 import com.talentreef.interviewquestions.takehome.models.projections.WidgetProjection;
 import com.talentreef.interviewquestions.takehome.respositories.WidgetRepository;
 import com.talentreef.interviewquestions.takehome.utils.GenericResponse;
+import com.talentreef.interviewquestions.takehome.utils.RequestValidator;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.coyote.Request;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -18,6 +20,7 @@ import org.springframework.util.Assert;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -26,6 +29,8 @@ public class WidgetServiceImpl implements WidgetService {
 
   private final WidgetRepository widgetRepository;
 
+  @Autowired
+  private RequestValidator requestValidator;
   @Autowired
   private ModelMapper modelMapper;
   @Autowired
@@ -51,8 +56,14 @@ public class WidgetServiceImpl implements WidgetService {
   public GenericResponse<?> addWidget(WidgetDTO widgetDTO) {
     var response=new GenericResponse<>();
     try{
+      Map<String, List<String>> fieldErrors = requestValidator.validate(widgetDTO);
+      if (!fieldErrors.isEmpty()) {
+        response.setCode(400);
+        response.setMessage("There were errors in the request");
+        response.setErrors(fieldErrors);
+        return response;
+      }
       var widgetEntity=widgetRepository.findByName(widgetDTO.getName());
-
       if(widgetEntity!=null){
         response.setCode(400);
         response.setMessage("The widget with name: " + widgetDTO.getName() + " already exists");
@@ -94,6 +105,14 @@ public class WidgetServiceImpl implements WidgetService {
   public GenericResponse<WidgetDTO> updateWidgetByName(String widgetName,WidgetDTO widgetDTO) {
     var response=new GenericResponse<WidgetDTO>();
     try{
+      Map<String, List<String>> fieldErrors = requestValidator.validate(widgetDTO);
+      if (!fieldErrors.isEmpty()) {
+        response.setCode(400);
+        response.setMessage("There were errors in the request");
+        response.setErrors(fieldErrors);
+        return response;
+      }
+
       var widgetEntity=widgetRepository.findByName(widgetName);
 
       if(widgetEntity==null){

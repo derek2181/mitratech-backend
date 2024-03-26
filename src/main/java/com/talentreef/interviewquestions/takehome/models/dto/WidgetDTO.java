@@ -14,12 +14,17 @@ import java.math.BigDecimal;
 
 @Data
 @NoArgsConstructor
+@Builder
+@AllArgsConstructor
 public class WidgetDTO {
   @Size(min = 3, max = 100)
   @NotNull
+  @NotBlank
   private String name;
 
   @Size(min = 5, max = 1000)
+  @NotBlank
+  @NotNull
   private String description;
 
   @Digits(integer = 5, fraction = 2)

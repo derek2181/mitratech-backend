@@ -1,9 +1,12 @@
 package com.talentreef.interviewquestions.takehome.controllers;
 
 import com.talentreef.interviewquestions.takehome.models.dto.WidgetDTO;
+import com.talentreef.interviewquestions.takehome.services.WidgetService;
 import com.talentreef.interviewquestions.takehome.services.WidgetServiceImpl;
 import com.talentreef.interviewquestions.takehome.utils.GenericResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.Assert;
@@ -15,20 +18,14 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin(origins = "*")
 public class WidgetController {
 
-  private final WidgetServiceImpl widgetServiceImpl;
-  //TODO custom exception handling
-  //TODO add logs
-  //TODO add Profiles
-  public WidgetController(WidgetServiceImpl widgetServiceImpl) {
-    Assert.notNull(widgetServiceImpl, "widgetService must not be null");
-    this.widgetServiceImpl = widgetServiceImpl;
-  }
+  @Autowired
+  private WidgetService widgetService;
 
   @GetMapping
-  public ResponseEntity<GenericResponse> getAllWidgets(@RequestParam(name = "page", defaultValue = "0") int page,
-                                                       @RequestParam(name = "size", defaultValue = "12") int size,
-                                                       @RequestParam(name = "sort", defaultValue = "12") boolean sort) {
-    var response=widgetServiceImpl.getAllWidgets(page,size,sort);
+  public ResponseEntity<GenericResponse<Page<WidgetDTO>>> getAllWidgets(@RequestParam(name = "page", defaultValue = "0") int page,
+                                                                         @RequestParam(name = "size", defaultValue = "12") int size,
+                                                                         @RequestParam(name = "sort", defaultValue = "12") boolean sort) {
+    var response=widgetService.getAllWidgets(page,size,sort);
     //TODO add pagination
     return ResponseEntity.status(response.getCode()).body(response);
   }
@@ -37,7 +34,7 @@ public class WidgetController {
   @PostMapping
   public ResponseEntity<GenericResponse> addWidget(@RequestBody WidgetDTO widgetDTO) {
 
-    var response=widgetServiceImpl.addWidget(widgetDTO);
+    var response=widgetService.addWidget(widgetDTO);
     return ResponseEntity.status(response.getCode()).body(response);
   }
   @GetMapping("search")
@@ -46,21 +43,21 @@ public class WidgetController {
                                                    @RequestParam(name = "size", defaultValue = "12") int size,
                                                          @RequestParam(name = "sort", defaultValue = "12") boolean sort) {
 
-    var response=widgetServiceImpl.getWidgetByName(name,page,size,sort);
+    var response=widgetService.getWidgetByName(name,page,size,sort);
     return ResponseEntity.status(response.getCode()).body(response);
   }
 
   @PatchMapping("{widgetName}")
   public ResponseEntity<GenericResponse> updateWidget(@PathVariable String widgetName, @RequestBody WidgetDTO widgetDTO) {
 
-    var response=widgetServiceImpl.updateWidgetByName(widgetName,widgetDTO);
+    var response=widgetService.updateWidgetByName(widgetName,widgetDTO);
     return ResponseEntity.status(response.getCode()).body(response);
   }
 
   @DeleteMapping("{widgetName}")
   public ResponseEntity<GenericResponse> deleteWidget(@PathVariable String widgetName) {
 
-    var response=widgetServiceImpl.deleteWidgetByName(widgetName);
+    var response=widgetService.deleteWidgetByName(widgetName);
     return ResponseEntity.status(response.getCode()).body(response);
   }
 }

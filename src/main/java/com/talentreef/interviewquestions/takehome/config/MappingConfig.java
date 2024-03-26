@@ -1,5 +1,6 @@
 package com.talentreef.interviewquestions.takehome.config;
 
+import com.talentreef.interviewquestions.takehome.utils.RequestValidator;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.context.annotation.Bean;
@@ -14,5 +15,10 @@ public class MappingConfig {
         modelMapper.getConfiguration()
                 .setMatchingStrategy(MatchingStrategies.STRICT);
         return modelMapper;
+    }
+
+    @Bean
+    public RequestValidator requestValidator(){
+        return new RequestValidator();
     }
 }
